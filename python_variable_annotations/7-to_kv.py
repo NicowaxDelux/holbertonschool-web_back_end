@@ -7,7 +7,7 @@ Complex types - string and int/float to tuple
 import typing
 
 
-def to_kv(K: str, v: typing.Union[int, float]) -> typing.Union[str, float]:
+def to_kv(k: str, v: typing.Union[int, float]) -> typing.Tuple[str, float]:
     """
     Parameters:
     K: str
@@ -16,4 +16,4 @@ def to_kv(K: str, v: typing.Union[int, float]) -> typing.Union[str, float]:
     Return:
     Tuple of str/float
     """
-    return (K, v**2)
+    return (k, v**2)
