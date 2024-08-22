@@ -5,7 +5,7 @@ Run time for four parallel comprehensions
 
 
 import time
-import asyncio
+from asyncio import gather
 async_comprehension = __import__('1-async_comprehension').async_comprehension
 
 
@@ -15,7 +15,7 @@ async def measure_runtime() -> float:
     """
     star_time = time.time()
 
-    results = await asyncio.gather(
+    results = await gather(
         async_comprehension(),
         async_comprehension(),
         async_comprehension(),
