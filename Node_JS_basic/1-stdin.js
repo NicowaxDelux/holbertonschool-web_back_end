@@ -9,5 +9,5 @@ process.stdin.on('data', (data) => {
 });
 
 process.on('exit', () => {
-  console.log('\nThis important software is now closing');
+  console.log('\r\nThis important software is now closing');
 });
