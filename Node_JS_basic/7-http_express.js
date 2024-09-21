@@ -3,7 +3,6 @@ const fs = require('fs');
 
 const app = express();
 
-// Helper function to parse the CSV file
 function countStudents(databasePath) {
   return new Promise((resolve, reject) => {
     fs.readFile(databasePath, 'utf-8', (err, data) => {
@@ -34,12 +33,10 @@ function countStudents(databasePath) {
   });
 }
 
-// Root endpoint
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
 
-// Students endpoint
 app.get('/students', async (req, res) => {
   const databasePath = process.argv[2];
   if (!databasePath) {
@@ -55,10 +52,8 @@ app.get('/students', async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(1245, () => {
   console.log('Server is running on port 1245');
 });
 
-// Export the app
 module.exports = app;
