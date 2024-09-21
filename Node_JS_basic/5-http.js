@@ -1,17 +1,15 @@
 const http = require('http');
-const countStudents = require('./3-read_file_async');
 const url = require('url');
+const countStudents = require('./3-read_file_async');
+
 const databaseFile = process.argv[2];
 
 const app = http.createServer((req, res) => {
   const reqUrl = url.parse(req.url, true).pathname;
-
   if (reqUrl === '/') {
-
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Hello Holberton School!');
   } else if (reqUrl === '/students') {
-
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.write('This is the list of our students\n');
 
