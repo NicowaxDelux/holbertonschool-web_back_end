@@ -1,34 +1,26 @@
-const fs = require('fs');
+import fs from 'fs';
+import { promisify } from 'util';
 
-function readDatabase(path) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8', (err, data) => {
-      if (err) {
-        reject(Error(err));
-        return;
-      }
-      const content = data.toString().split('\n');
+const readFile = promisify(fs.readFile);
 
-      let students = content.filter((item) => item);
+export const readDatabase = async (filePath) => {
+    try {
+        const data = await readFile(filePath, 'utf-8');
+        const lines = data.split('\n').slice(1); // Ignorar la cabecera
+        const students = {};
 
-      students = students.map((item) => item.split(','));
+        lines.forEach(line => {
+            const [firstname, lastname, age, field] = line.split(',');
+            if (field) {
+                if (!students[field]) {
+                    students[field] = [];
+                }
+                students[field].push(firstname);
+            }
+        });
 
-      const fields = {};
-      for (const i in students) {
-        if (i !== 0) {
-          if (!fields[students[i][3]]) fields[students[i][3]] = [];
-
-          fields[students[i][3]].push(students[i][0]);
-        }
-      }
-
-      delete fields.field;
-
-      resolve(fields);
-
-      //   return fields;
-    });
-  });
-}
-
-export default readDatabase;
+        return students;
+    } catch (error) {
+        throw new Error('Cannot load the database');
+    }
+};
