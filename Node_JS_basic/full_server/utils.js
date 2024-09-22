@@ -1,30 +1,39 @@
 import fs from 'fs';
+import readline from 'readline';
 
-export function readDatabase(filePath) {
+export const readDatabase = (filePath) => {
   return new Promise((resolve, reject) => {
+    if (!filePath) {
+      return reject(new Error('No file path provided'));
+    }
+
+    // Verifica si el archivo existe
     if (!fs.existsSync(filePath)) {
       return reject(new Error('Cannot load the database'));
     }
 
-    fs.readFile(filePath, 'utf-8', (err, data) => {
-      if (err) {
-        return reject(new Error('Cannot load the database'));
-      }
+    const studentsByField = {};
+    const rl = readline.createInterface({
+      input: fs.createReadStream(filePath),
+      crlfDelay: Infinity,
+    });
 
-      const lines = data.split('\n').filter((line) => line); 
-      const fields = {};
-
-      for (const line of lines.slice(1)) {
-        const [firstname, , field] = line.split(',');
-
-        if (!fields[field]) {
-          fields[field] = [];
+    rl.on('line', (line) => {
+      const [firstName, , field] = line.split(',');
+      if (firstName !== 'firstname') { // Evita la cabecera
+        if (!studentsByField[field]) {
+          studentsByField[field] = [];
         }
-        fields[field].push(firstname);
+        studentsByField[field].push(firstName);
       }
+    });
 
-      resolve(fields);
+    rl.on('close', () => {
+      resolve(studentsByField);
+    });
+
+    rl.on('error', (error) => {
+      reject(new Error('Cannot load the database'));
     });
   });
-}
-
+};
