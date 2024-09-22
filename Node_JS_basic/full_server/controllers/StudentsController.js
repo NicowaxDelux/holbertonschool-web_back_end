@@ -8,7 +8,6 @@ class StudentsController {
       const students = await readDatabase(dbPath);
       let responseText = 'This is the list of our students\n';
 
-      // Itera sobre los campos en la base de datos (por ejemplo, CS, SWE)
       for (const field in students) {
         if (students.hasOwnProperty(field)) {
           const studentList = students[field];
@@ -16,9 +15,9 @@ class StudentsController {
         }
       }
 
-      res.status(200).send(responseText.trim()); // Envía la respuesta sin salto de línea al final
+      res.status(200).send(responseText.trim()); // Usa trim() para eliminar cualquier espacio o salto de línea innecesario
     } catch (error) {
-      res.status(500).send('Cannot load the database'); // Error si no se puede cargar la base de datos
+      res.status(500).send('Cannot load the database');
     }
   }
 
