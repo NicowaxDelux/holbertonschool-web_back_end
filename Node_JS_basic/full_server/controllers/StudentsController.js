@@ -12,7 +12,6 @@ class StudentsController {
 
             res.status(200).send(response.join('\n'));
         } catch (error) {
-            // Respuesta cuando no se puede cargar la base de datos
             res.status(500).send('Cannot load the database');
         }
     }
@@ -20,7 +19,6 @@ class StudentsController {
     static async getAllStudentsByMajor(req, res) {
         const major = req.params.major;
 
-        // Verificar si el major es válido
         if (major !== 'CS' && major !== 'SWE') {
             return res.status(500).send('Major parameter must be CS or SWE');
         }
@@ -35,7 +33,6 @@ class StudentsController {
 
             res.status(200).send(`List: ${list.join(', ')}`);
         } catch (error) {
-            // Respuesta cuando no se puede cargar la base de datos
             res.status(500).send('Cannot load the database');
         }
     }
