@@ -12,11 +12,8 @@ class StudentsController {
 
             res.status(200).send(response.join('\n'));
         } catch (error) {
-            if (error.message === 'Cannot load the database') {
-                res.status(500).send('Cannot load the database');
-            } else {
-                res.status(500).send(error.message);
-            }
+            // Respuesta cuando no se puede cargar la base de datos
+            res.status(500).send('Cannot load the database');
         }
     }
 
@@ -38,11 +35,8 @@ class StudentsController {
 
             res.status(200).send(`List: ${list.join(', ')}`);
         } catch (error) {
-            if (error.message === 'Cannot load the database') {
-                res.status(500).send('Cannot load the database');
-            } else {
-                res.status(500).send(error.message);
-            }
+            // Respuesta cuando no se puede cargar la base de datos
+            res.status(500).send('Cannot load the database');
         }
     }
 }
