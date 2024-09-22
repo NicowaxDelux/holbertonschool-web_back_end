@@ -1,39 +1,34 @@
-import fs from 'fs';
-import readline from 'readline';
+const fs = require('fs');
 
-export const readDatabase = (filePath) => {
+function readDatabase(path) {
   return new Promise((resolve, reject) => {
-    if (!filePath) {
-      return reject(new Error('No file path provided'));
-    }
-
-    // Verifica si el archivo existe
-    if (!fs.existsSync(filePath)) {
-      return reject(new Error('Cannot load the database'));
-    }
-
-    const studentsByField = {};
-    const rl = readline.createInterface({
-      input: fs.createReadStream(filePath),
-      crlfDelay: Infinity,
-    });
-
-    rl.on('line', (line) => {
-      const [firstName, , field] = line.split(',');
-      if (firstName !== 'firstname') { // Evita la cabecera
-        if (!studentsByField[field]) {
-          studentsByField[field] = [];
-        }
-        studentsByField[field].push(firstName);
+    fs.readFile(path, 'utf8', (err, data) => {
+      if (err) {
+        reject(Error(err));
+        return;
       }
-    });
+      const content = data.toString().split('\n');
 
-    rl.on('close', () => {
-      resolve(studentsByField);
-    });
+      let students = content.filter((item) => item);
 
-    rl.on('error', (error) => {
-      reject(new Error('Cannot load the database'));
+      students = students.map((item) => item.split(','));
+
+      const fields = {};
+      for (const i in students) {
+        if (i !== 0) {
+          if (!fields[students[i][3]]) fields[students[i][3]] = [];
+
+          fields[students[i][3]].push(students[i][0]);
+        }
+      }
+
+      delete fields.field;
+
+      resolve(fields);
+
+      //   return fields;
     });
   });
-};
+}
+
+export default readDatabase;
